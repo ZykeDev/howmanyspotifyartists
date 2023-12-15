@@ -8,22 +8,16 @@
 <body>
 <h1>Spotify Data Retrieval</h1>
 <button onclick="authorizeSpotify()">Authorize Spotify</button>
-
 <div>
-	<label for="accessToken">Access Token:</label>
-	<!-- Set the default value for the access token -->
-	<input type="text" id="accessToken" placeholder="Paste your access token here">
-	<button onclick="getFollowedArtistsCount()">Get Followed Artists Count</button>
+  <button onclick="getFollowedArtistsCount()">Get Followed Artists Count</button>
+  <div id="artistsCount"></div>
 </div>
-
-<!-- Button to fetch and print the account's data -->
-<button onclick="getAccountData()">Get Account Data</button>
 
 <script>
 	// Code written by ChatGPT - 2023/12/16
 	// Spotify API credentials
 	const clientId = 'c58b200c02494574bf3ce6dc862f6a3f';
-	const redirectUri = 'https://zykedev.github.io/';
+	const redirectUri = 'http://localhost/';
 
 	// Function to initiate Spotify authorization
 	function authorizeSpotify() {
@@ -41,7 +35,7 @@
 		window.location.href = authorizeUrl;
 	}
 
-	// Function to fetch and log the number of artists the account follows
+	// Function to fetch and update the number of artists the account follows on the page
 	function getFollowedArtistsCount() {
 		// Retrieve the access token from the input field
 		const accessToken = document.getElementById('accessToken').value;
@@ -58,39 +52,12 @@
 					// Extract the total count of followed artists from the API response
 					const artistsCount = data.artists.total;
 
-					// Log the count to the console
-					console.log('Number of artists the account follows:', artistsCount);
+					// Update the content of the artistsCount div with the count
+					document.getElementById('artistsCount').innerText = 'Number of artists the account follows: ' + artistsCount;
 				})
 				.catch(error => {
 					// Log an error message if the API request fails
 					console.error('Error fetching followed artists:', error);
-				});
-		} else {
-			// Log an error message if the access token is not provided
-			console.error('Access token is required');
-		}
-	}
-
-	// Function to fetch and print the account's data
-	function getAccountData() {
-		// Retrieve the access token from the input field
-		const accessToken = document.getElementById('accessToken').value;
-
-		// Check if the access token is provided and not the default text
-		if (accessToken && accessToken !== 'Paste your access token here') {
-			// Make a request to the Spotify API to get the user's account data
-			fetch('https://api.spotify.com/v1/me', {
-				headers: {
-					'Authorization': 'Bearer ' + accessToken
-				}
-			}).then(response => response.json())
-				.then(data => {
-					// Log the account data to the console
-					console.log('Spotify Account Data:', data);
-				})
-				.catch(error => {
-					// Log an error message if the API request fails
-					console.error('Error fetching account data:', error);
 				});
 		} else {
 			// Log an error message if the access token is not provided
