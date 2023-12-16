@@ -39,7 +39,7 @@ const redirectUri = 'https://zykedev.github.io/howmanyspotifyartists/';
 	// Function to fetch and update the number of artists the account follows on the page
 	function getFollowedArtistsCount() {
 		// Retrieve the access token from the input field
-		const accessToken = document.getElementById('accessToken').value;
+		const accessToken = extractAccessTokenFromUrl();
 
 		// Check if the access token is provided and not the default text
 		if (accessToken && accessToken !== 'Paste your access token here') {
@@ -77,11 +77,14 @@ const redirectUri = 'https://zykedev.github.io/howmanyspotifyartists/';
 			// Retrieve the access token from the URL and set it in the input field
 			const accessToken = params.get('access_token');
 			document.getElementById('accessToken').value = accessToken;
-		} else {
-			// Log an error message if the access token is not found in the URL
-			console.error('Access token not found in the URL');
 		}
 	}
+
+	// Function to extract access token from the URL parameters
+        function extractAccessTokenFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('access_token');
+        }
 
 	// Call the function to handle the callback on page load
 	handleCallback();
